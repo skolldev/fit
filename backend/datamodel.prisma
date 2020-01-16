@@ -1,0 +1,6 @@
+type Exercise {
+  id: ID! @id
+  displayName: String!
+  equipment: String!
+  image: String
+}

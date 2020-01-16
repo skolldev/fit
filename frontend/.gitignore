@@ -25,8 +25,6 @@ yarn-error.log*
 # next
 /.next
 
-# VS Code
-/.vscode
 
 # Rider
 /.idea
