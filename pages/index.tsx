@@ -15,7 +15,6 @@ const Home: NextPage = () => (
         crossOrigin="anonymous"
       />
     </Head>
-    <span>Hello World!</span>
     <ExerciseLibrary />
   </div>
 );

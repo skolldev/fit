@@ -7,15 +7,18 @@ import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 
 let mockLibrary: IExercise[] = [
   {
+    id: 0,
     displayName: "Bench Press",
     equipment: "Barbell"
   },
   {
+    id: 1,
     displayName: "Conventional Deadlift",
     equipment: "Barbell"
   },
 
   {
+    id: 2,
     displayName: "High Bar Squat",
     equipment: "Barbell"
   }
