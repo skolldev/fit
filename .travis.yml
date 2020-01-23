@@ -5,5 +5,4 @@ cache:
   directories:
     - node-modules
 script:
-  - npm run build
   - npm test
