@@ -1,11 +1,21 @@
 import App from "next/app";
 import React from "react";
+import { exerciseLibrary } from "../mock-data/exercise-library";
+import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 
 class DefaultApp extends App {
-    public render() {
-        const { Component, pageProps } = this.props;
-        return <Component {...pageProps} />;
-    }
+  state = {
+    library: exerciseLibrary
+  };
+
+  public render(): JSX.Element {
+    const { Component, pageProps } = this.props;
+    return (
+      <ExerciseLibraryContext.Provider value={this.state.library}>
+        <Component {...pageProps} />
+      </ExerciseLibraryContext.Provider>
+    );
+  }
 }
 
 export default DefaultApp;
