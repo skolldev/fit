@@ -1,4 +1,3 @@
-import { IExerciseLibrary } from "../models/exercise-library.interface";
 import { IExercise } from "../models/exercise.interface";
 
 const DEFAULT_IMAGE = "https://webkit.org/demos/srcset/image-src.png";
@@ -682,14 +681,15 @@ exercises.sort(({ displayName: a }, { displayName: b }) =>
   a > b ? 1 : b > a ? -1 : 0
 );
 
-const lib: IExerciseLibrary = {};
+const lib: IExercise[] = [];
 
 for (let i = 0; i < exercises.length; i++) {
   const ex = exercises[i];
   if (!ex.image) {
     ex.image = DEFAULT_IMAGE;
   }
-  lib[i.toString()] = ex;
+  ex.id = i;
+  lib.push(ex);
 }
 
 export const exerciseLibrary = lib;

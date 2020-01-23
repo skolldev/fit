@@ -8,19 +8,6 @@ class DefaultApp extends App {
     library: exerciseLibrary
   };
 
-  counter = 4;
-  public addExercise(): void {
-    const lib = { ...this.state.library };
-    const id = this.counter.toString();
-    lib[id] = {
-      displayName: `Exercise ${id}`,
-      equipment: "Barbell",
-      image: "https://webkit.org/demos/srcset/image-src.png"
-    };
-    this.setState({ library: lib });
-    this.counter++;
-  }
-
   public render(): JSX.Element {
     const { Component, pageProps } = this.props;
     return (

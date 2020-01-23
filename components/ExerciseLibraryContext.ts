@@ -1,6 +1,6 @@
 import { createContext } from "react";
-import { IExerciseLibrary } from "../models/exercise-library.interface";
+import { IExercise } from "../models/exercise.interface";
 
-const ExerciseLibraryContext = createContext<IExerciseLibrary>({});
+const ExerciseLibraryContext = createContext<IExercise[]>([]);
 
 export default ExerciseLibraryContext;
