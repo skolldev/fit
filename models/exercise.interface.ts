@@ -13,5 +13,5 @@ export interface IExercise {
   /**
    * An image of this exercise
    */
-  image: string;
+  image?: string;
 }
