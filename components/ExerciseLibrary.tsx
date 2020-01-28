@@ -1,8 +1,18 @@
 import React, { useContext, useState, ChangeEvent } from "react";
+import { ISelectedExercises } from "../models/selected-exercises.interface";
+import { IExercise } from "../models/exercise.interface";
 import Exercise from "./Exercise";
 import ExerciseLibraryContext from "./ExerciseLibraryContext";
 
-const ExerciseLibrary = (): JSX.Element => {
+type Props = {
+  selectedExercises: ISelectedExercises;
+  setExercises: (value: React.SetStateAction<ISelectedExercises>) => void;
+};
+
+const ExerciseLibrary = ({
+  setExercises,
+  selectedExercises
+}: Props): JSX.Element => {
   const totalLibrary = useContext(ExerciseLibraryContext);
 
   const [library, setLibrary] = useState(totalLibrary);
@@ -22,6 +32,34 @@ const ExerciseLibrary = (): JSX.Element => {
     setLibrary(result);
   };
 
+  const getSelectedExercise = (
+    key: string | undefined
+  ): IExercise | undefined => {
+    if (!key) {
+      return undefined;
+    }
+
+    return selectedExercises[key];
+  };
+
+  const handleExercise = (exercise: IExercise): void => {
+    if (exercise.id === undefined) {
+      return;
+    }
+
+    const key = exercise.id.toString();
+    const selection = { ...selectedExercises };
+    const exists = selection[key] !== undefined;
+
+    if (exists) {
+      delete selection[key];
+    } else {
+      selection[key] = exercise;
+    }
+
+    setExercises(selection);
+  };
+
   return (
     <div>
       <div className="flex flex-col w-1/6">
@@ -38,9 +76,26 @@ const ExerciseLibrary = (): JSX.Element => {
           ? `Found ${library.length} results for "${filter}":`
           : `Showing all ${totalLibrary.length} exercises`}
       </span>
-      {library.map(exercise => {
-        return <Exercise key={exercise.id} exercise={exercise} />;
-      })}
+      <div className="flex flex-col">
+        {library.map(exercise => {
+          return (
+            <button
+              type="button"
+              key={exercise.id}
+              className={`hover:bg-gray-400 focus:bg-gray-500 active:bg-gray-600 ${
+                getSelectedExercise(exercise.id)
+                  ? "border-l-4 border-red-700"
+                  : null
+              }`}
+              onClick={(): void => {
+                handleExercise(exercise);
+              }}
+            >
+              <Exercise exercise={exercise} />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

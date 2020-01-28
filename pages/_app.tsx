@@ -2,6 +2,7 @@ import App from "next/app";
 import React from "react";
 import { exerciseLibrary } from "../mock-data/exercise-library";
 import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
+import "../styles/index.css";
 
 class DefaultApp extends App {
   state = {

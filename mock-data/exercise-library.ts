@@ -1,3 +1,4 @@
+import uuid from "uuid/v4";
 import { IExercise } from "../models/exercise.interface";
 
 const DEFAULT_IMAGE = "https://webkit.org/demos/srcset/image-src.png";
@@ -688,7 +689,7 @@ for (let i = 0; i < exercises.length; i++) {
   if (!ex.image) {
     ex.image = DEFAULT_IMAGE;
   }
-  ex.id = i;
+  ex.id = uuid();
   lib.push(ex);
 }
 

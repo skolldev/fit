@@ -1,5 +1,5 @@
 export interface IExercise {
-  id?: number;
+  id?: string;
   /**
    * The display name of this exercise
    */

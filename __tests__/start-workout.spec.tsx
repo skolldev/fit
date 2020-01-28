@@ -2,8 +2,11 @@ import { render, RenderResult, fireEvent } from "@testing-library/react";
 import React from "react";
 import { axe } from "jest-axe";
 import { IExercise } from "../models/exercise.interface";
-import ExerciseLibrary from "../components/ExerciseLibrary";
 import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
+import StartWorkout from "../pages/start-workout";
+
+// jest.mock("uuid/v4");
+// jest.mock("next/router");
 
 const mockLibrary: IExercise[] = [
   {
@@ -29,40 +32,43 @@ describe("exercise", () => {
   beforeEach(() => {
     renderResult = render(
       <ExerciseLibraryContext.Provider value={mockLibrary}>
-        <ExerciseLibrary
-          selectedExercises={{}}
-          setExercises={(): void => {
-            console.log("set called");
-          }}
-        />
+        <StartWorkout />
       </ExerciseLibraryContext.Provider>
     );
   });
 
-  test("should render multiple exercises", () => {
+  test("should be able to select and deselect exercises", () => {
     const { getByText } = renderResult;
-    expect(getByText(/bench press/i)).toBeInTheDocument();
-    expect(getByText(/high bar squat/i)).toBeInTheDocument();
+
+    const element = getByText(/bench press/i);
+    fireEvent.click(element);
+
+    expect(
+      element.parentElement?.parentElement?.parentElement?.classList
+    ).toContain("border-red-700");
+
+    fireEvent.click(element);
+
+    expect(
+      element.parentElement?.parentElement?.parentElement?.classList
+    ).not.toContain("border-red-700");
   });
+
+  // test("should pass exercises to workout", () => {
+  //   const { getByText } = renderResult;
+
+  //   (uuid as any).default = (): string => "id";
+
+  //   fireEvent.click(getByText(/bench press/i));
+  //   fireEvent.click(getByText(/high bar squat/i));
+  //   fireEvent.click(getByText(/start/i));
+
+  //   expect(localStorage.setItem).toHaveBeenCalledWith(["id", {}]);
+  // });
 
   test("should be accessible", async () => {
     const { container } = renderResult;
     const result = await axe(container);
     expect(result).toHaveNoViolations();
-  });
-
-  test("should be able to filter the library", () => {
-    const { getByLabelText, getByText, queryByText } = renderResult;
-
-    fireEvent.change(getByLabelText(/search exercises/i), {
-      target: { value: "squat" }
-    });
-    expect(getByText(/high bar squat/i));
-    expect(queryByText(/bench press/i)).not.toBeInTheDocument();
-
-    fireEvent.change(getByLabelText(/search exercises/i), {
-      target: { value: "" }
-    });
-    expect(getByText(/bench press/i));
   });
 });
