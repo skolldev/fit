@@ -5,7 +5,7 @@ import { IExercise } from "../models/exercise.interface";
 import ExerciseLibrary from "../components/ExerciseLibrary";
 import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 
-let mockLibrary: IExercise[] = [
+const mockLibrary: IExercise[] = [
   {
     id: 0,
     displayName: "Bench Press",
