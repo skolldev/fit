@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { render, RenderResult, fireEvent } from "@testing-library/react";
 import React from "react";
 import { axe } from "jest-axe";
+import uuid from "uuid/v4";
+import { RouterContext } from "next/dist/next-server/lib/router-context";
 import { IExercise } from "../models/exercise.interface";
 import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 import StartWorkout from "../pages/start-workout";
 
-// jest.mock("uuid/v4");
-// jest.mock("next/router");
+jest.mock("uuid/v4");
 
 const mockLibrary: IExercise[] = [
   {
@@ -29,11 +31,27 @@ const mockLibrary: IExercise[] = [
 
 let renderResult: RenderResult;
 describe("exercise", () => {
+  let router;
   beforeEach(() => {
+    router = {
+      pathname: "/start-workout",
+      route: "/start-workout",
+      asPath: "/start-workout",
+      query: { start: "" },
+      push: jest.fn(() => Promise.resolve(true)),
+      replace: () => Promise.resolve(true),
+      reload: () => {},
+      back: () => {},
+      prefetch: () => Promise.resolve(),
+      beforePopState: () => {},
+      events: { on: () => {}, off: () => {}, emit: () => {} }
+    };
     renderResult = render(
-      <ExerciseLibraryContext.Provider value={mockLibrary}>
-        <StartWorkout />
-      </ExerciseLibraryContext.Provider>
+      <RouterContext.Provider value={router}>
+        <ExerciseLibraryContext.Provider value={mockLibrary}>
+          <StartWorkout />
+        </ExerciseLibraryContext.Provider>
+      </RouterContext.Provider>
     );
   });
 
@@ -54,21 +72,37 @@ describe("exercise", () => {
     ).not.toContain("border-red-700");
   });
 
-  // test("should pass exercises to workout", () => {
-  //   const { getByText } = renderResult;
+  test("should pass exercises to workout", () => {
+    const { getByText, debug } = renderResult;
+    (uuid as any).mockImplementation((): string => "12");
+    debug();
+    fireEvent.click(getByText(/bench press/i));
+    fireEvent.click(getByText(/high bar squat/i));
+    fireEvent.click(getByText(/start/i));
 
-  //   (uuid as any).default = (): string => "id";
-
-  //   fireEvent.click(getByText(/bench press/i));
-  //   fireEvent.click(getByText(/high bar squat/i));
-  //   fireEvent.click(getByText(/start/i));
-
-  //   expect(localStorage.setItem).toHaveBeenCalledWith(["id", {}]);
-  // });
+    expect(router.push).toHaveBeenCalledWith("/workout/12");
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const savedWorkout = JSON.parse(localStorage.getItem("12")!);
+    expect(savedWorkout.exercises).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "displayName": "Bench Press",
+          "equipment": "Barbell",
+          "id": "a",
+        },
+        Object {
+          "displayName": "High Bar Squat",
+          "equipment": "Barbell",
+          "id": "c",
+        },
+      ]
+    `);
+  });
 
   test("should be accessible", async () => {
-    const { container } = renderResult;
+    const { container, debug } = renderResult;
     const result = await axe(container);
+    debug();
     expect(result).toHaveNoViolations();
   });
 });

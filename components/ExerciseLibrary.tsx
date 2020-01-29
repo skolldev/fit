@@ -90,6 +90,7 @@ const ExerciseLibrary = ({
               onClick={(): void => {
                 handleExercise(exercise);
               }}
+              
             >
               <Exercise exercise={exercise} />
             </button>

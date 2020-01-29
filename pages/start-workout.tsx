@@ -9,6 +9,7 @@ import { IWorkout } from "../models/workout.interface";
 
 const StartWorkout = (): JSX.Element => {
   const router = useRouter();
+
   const [selectedExercises, setSelectedExercises] = useState<
     ISelectedExercises
   >({});
