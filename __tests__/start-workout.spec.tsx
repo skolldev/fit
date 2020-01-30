@@ -72,10 +72,16 @@ describe("exercise", () => {
     ).not.toContain("border-red-700");
   });
 
+  test("should not start workout without any exercises", () => {
+    const { getByText } = renderResult;
+    fireEvent.click(getByText(/start/i));
+    expect(router.push).not.toHaveBeenCalled();
+  });
+
   test("should pass exercises to workout", () => {
-    const { getByText, debug } = renderResult;
+    const { getByText } = renderResult;
     (uuid as any).mockImplementation((): string => "12");
-    debug();
+
     fireEvent.click(getByText(/bench press/i));
     fireEvent.click(getByText(/high bar squat/i));
     fireEvent.click(getByText(/start/i));

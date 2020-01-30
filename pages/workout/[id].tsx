@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import moment from "moment";
+import { NextPage } from "next";
 import { IWorkout } from "../../models/workout.interface";
 
-const Workout = (): JSX.Element => {
+const Workout: NextPage = () => {
   const [workout, setWorkout] = useState<IWorkout | null>(null);
   const router = useRouter();
 
