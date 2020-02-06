@@ -7,18 +7,18 @@ import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 
 const mockLibrary: IExercise[] = [
   {
-    id: 0,
+    id: "a",
     displayName: "Bench Press",
     equipment: "Barbell"
   },
   {
-    id: 1,
+    id: "b",
     displayName: "Conventional Deadlift",
     equipment: "Barbell"
   },
 
   {
-    id: 2,
+    id: "c",
     displayName: "High Bar Squat",
     equipment: "Barbell"
   }
@@ -29,7 +29,12 @@ describe("exercise", () => {
   beforeEach(() => {
     renderResult = render(
       <ExerciseLibraryContext.Provider value={mockLibrary}>
-        <ExerciseLibrary />
+        <ExerciseLibrary
+          selectedExercises={{}}
+          setExercises={(): void => {
+            console.log("set called");
+          }}
+        />
       </ExerciseLibraryContext.Provider>
     );
   });
