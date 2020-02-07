@@ -3,7 +3,8 @@ import { render, RenderResult, fireEvent } from "@testing-library/react";
 import React from "react";
 import { axe } from "jest-axe";
 import uuid from "uuid/v4";
-import { RouterContext } from "next/dist/next-server/lib/router-context";
+import { createMemoryHistory, MemoryHistory } from "history";
+import { Router } from "react-router-dom";
 import { IExercise } from "../models/exercise.interface";
 import ExerciseLibraryContext from "../components/ExerciseLibraryContext";
 import StartWorkout from "../pages/start-workout";
@@ -31,27 +32,16 @@ const mockLibrary: IExercise[] = [
 
 let renderResult: RenderResult;
 describe("exercise", () => {
-  let router;
+  let history: MemoryHistory;
   beforeEach(() => {
-    router = {
-      pathname: "/start-workout",
-      route: "/start-workout",
-      asPath: "/start-workout",
-      query: { start: "" },
-      push: jest.fn(() => Promise.resolve(true)),
-      replace: () => Promise.resolve(true),
-      reload: () => {},
-      back: () => {},
-      prefetch: () => Promise.resolve(),
-      beforePopState: () => {},
-      events: { on: () => {}, off: () => {}, emit: () => {} }
-    };
+    history = createMemoryHistory();
+    history.push = jest.fn();
     renderResult = render(
-      <RouterContext.Provider value={router}>
+      <Router history={history}>
         <ExerciseLibraryContext.Provider value={mockLibrary}>
           <StartWorkout />
         </ExerciseLibraryContext.Provider>
-      </RouterContext.Provider>
+      </Router>
     );
   });
 
@@ -75,7 +65,7 @@ describe("exercise", () => {
   test("should not start workout without any exercises", () => {
     const { getByText } = renderResult;
     fireEvent.click(getByText(/start/i));
-    expect(router.push).not.toHaveBeenCalled();
+    expect(history.push).not.toHaveBeenCalled();
   });
 
   test("should pass exercises to workout", () => {
@@ -86,7 +76,7 @@ describe("exercise", () => {
     fireEvent.click(getByText(/high bar squat/i));
     fireEvent.click(getByText(/start/i));
 
-    expect(router.push).toHaveBeenCalledWith("/workout/12");
+    expect(history.push).toHaveBeenCalled();
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const savedWorkout = JSON.parse(localStorage.getItem("12")!);
     expect(savedWorkout.exercises).toMatchInlineSnapshot(`

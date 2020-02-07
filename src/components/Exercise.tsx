@@ -11,7 +11,7 @@ const Exercise = ({ exercise }: ExerciseProps): JSX.Element => {
       <img
         className="w-16"
         src={exercise.image}
-        alt={`image of ${exercise.displayName}`}
+        alt={`${exercise.displayName}`}
       />
       <div className="ml-4 flex flex-col justify-center text-left">
         <span className="font-bold text-lg">{exercise.displayName}</span>

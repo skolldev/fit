@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 
 import uuid from "uuid/v4";
 import moment from "moment";
-import { useRouter } from "next/router";
-import { NextPage } from "next";
+import { useHistory } from "react-router-dom";
 import { ISelectedExercises } from "../models/selected-exercises.interface";
 import ExerciseLibrary from "../components/ExerciseLibrary";
 import { IWorkout } from "../models/workout.interface";
 import { IError } from "../models/error.interface";
 
-const StartWorkout: NextPage = () => {
-  const router = useRouter();
-
+const StartWorkout = () => {
   const [error, setError] = useState<IError>({});
   const [selectedExercises, setSelectedExercises] = useState<
     ISelectedExercises
   >({});
+  const history = useHistory();
 
   useEffect(() => {
     if (Object.keys(selectedExercises).length > 0) {
@@ -52,7 +50,7 @@ const StartWorkout: NextPage = () => {
     };
 
     localStorage.setItem(id, JSON.stringify(workout));
-    router.push(`/workout/${id}`);
+    history.push(`/workout/${id}`);
   };
 
   return (

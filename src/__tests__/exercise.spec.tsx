@@ -20,7 +20,7 @@ describe("exercise", () => {
   });
   test("should render exercise name, equipment and image", () => {
     const { getByText, getByAltText } = renderResult;
-    const exerciseImage = new RegExp(`image of ${exercise.displayName}`, "i");
+    const exerciseImage = new RegExp(`${exercise.displayName}`, "i");
 
     getByText(exercise.displayName);
     getByText(exercise.equipment);
